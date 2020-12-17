@@ -7,16 +7,8 @@ import 'package:video_player/video_player.dart';
 class PlayerController extends IPlayerController<VideoPlayerController> {
   VideoPlayerController _controller;
 
-  PlayerController(
-      {@required String link,
-      Duration initDuration,
-      void Function() onPlaying,
-      void Function() onPlayingError})
-      : super(
-            link: link,
-            initDuration: initDuration,
-            onPlaying: onPlaying,
-            onPlayingError: onPlayingError);
+  PlayerController({@required String initLink, Duration initDuration})
+      : super(initLink: initLink, initDuration: initDuration);
 
   @override
   VideoPlayerController get baseController => _controller;
@@ -66,7 +58,7 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
   }
 
   @override
-  Future<void> seekTo(Duration duration) async {
+  Future<void> seekTo([Duration duration = const Duration(seconds: 5)]) async {
     if (_controller == null) {
       return Future.error('Invalid state');
     }

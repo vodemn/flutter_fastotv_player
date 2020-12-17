@@ -22,7 +22,7 @@ abstract class ILitePlayerState extends State<ILitePlayer> {
   void initState() {
     super.initState();
     _setScreen(true);
-    controller.setVideoLink(controller.link);
+    controller.initLink();
   }
 
   @override
