@@ -1,0 +1,16 @@
+include: package:lint/analysis_options.yaml
+# https://github.com/passsy/dart-lint/blob/master/lib/analysis_options.yaml
+
+
+analyzer:
+  strong-mode:
+    # Will become the default once non-nullable types land
+    # https://github.com/dart-lang/sdk/issues/31410#issuecomment-510683629
+    implicit-casts: true
+
+# List of all available lint rules
+# https://dart-lang.github.io/linter/lints/
+linter:
+  rules:
+    # https://dart-lang.github.io/linter/lints/constant_identifier_names.html
+    constant_identifier_names: false

@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:player/common/controller.dart';
+import 'package:player/common/player.dart';
+import 'package:video_player/video_player.dart';
+
+class LitePlayer extends ILitePlayer {
+  const LitePlayer(
+      {@required IPlayerController controller,
+      Widget placeholder = const Center(child: CircularProgressIndicator()),
+      Key key})
+      : super(controller: controller, placeholder: placeholder, key: key);
+
+  @override
+  _LitePlayerState createState() {
+    return _LitePlayerState();
+  }
+}
+
+class _LitePlayerState extends ILitePlayerState {
+  @override
+  Widget player() {
+    return AspectRatio(
+        aspectRatio: controller.aspectRatio(), child: VideoPlayer(controller.baseController));
+  }
+}
