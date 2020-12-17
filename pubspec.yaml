@@ -1,5 +1,4 @@
 name: player
-description: A new flutter plugin project.
 version: 0.0.1
 
 publish_to: none
@@ -23,11 +22,3 @@ dev_dependencies:
     sdk: flutter
   lint: ^1.5.1
 
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.fastogt.player
-        pluginClass: PlayerPlugin
-      ios:
-        pluginClass: PlayerPlugin
