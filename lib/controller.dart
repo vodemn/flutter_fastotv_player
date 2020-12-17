@@ -9,16 +9,8 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
   VlcPlayerController _controller;
   String url;
 
-  PlayerController(
-      {@required String link,
-      Duration initDuration,
-      void Function() onPlaying,
-      void Function() onPlayingError})
-      : super(
-            link: link,
-            initDuration: initDuration,
-            onPlaying: onPlaying,
-            onPlayingError: onPlayingError) {
+  PlayerController({@required String initLink, Duration initDuration})
+      : super(initLink: initLink, initDuration: initDuration) {
     _controller = VlcPlayerController(onInit: _handleInit);
   }
 
@@ -74,7 +66,7 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
   }
 
   @override
-  Future<void> seekTo(Duration duration) async {
+  Future<void> seekTo([Duration duration = const Duration(seconds: 5)]) async {
     if (!_controller.initialized) {
       return Future.error('Invalid state');
     }

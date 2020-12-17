@@ -20,7 +20,7 @@ class _LitePlayerState extends ILitePlayerState {
   Widget player() {
     final options = ['--no-skip-frames'];
     return VlcPlayer(
-        url: controller.link,
+        url: controller.currentLink,
         aspectRatio: controller.aspectRatio(),
         controller: controller.baseController,
         placeholder: widget.placeholder,

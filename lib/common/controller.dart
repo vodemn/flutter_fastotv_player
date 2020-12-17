@@ -1,21 +1,26 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:player/common/states.dart';
 
 abstract class IPlayerController<T> {
-  String link;
+  String _link;
   final Duration initDuration;
   final StreamController<IPlayerState> _state = StreamController<IPlayerState>.broadcast();
-  final void Function() onPlaying;
-  final void Function() onPlayingError;
-
   T get baseController;
 
-  IPlayerController({this.link, this.initDuration, this.onPlaying, this.onPlayingError});
+  IPlayerController({String initLink, this.initDuration}) : _link = initLink;
 
-  
   Stream<IPlayerState> get state => _state.stream;
+
+  String get currentLink => _link;
+
+  @visibleForOverriding
+  void onPlaying() {}
+
+  @visibleForOverriding
+  void onPlayingError() {}
 
   bool isPlaying();
 
@@ -27,13 +32,13 @@ abstract class IPlayerController<T> {
 
   Future<void> play();
 
-  Future<void> seekTo(Duration duration);
+  Future<void> seekTo([Duration duration = const Duration(seconds: 5)]);
 
-  Future<void> seekForward(Duration duration) {
+  Future<void> seekForward([Duration duration = const Duration(seconds: 5)]) {
     return seekTo(position() + duration);
   }
 
-  Future<void> seekBackward(Duration duration) {
+  Future<void> seekBackward([Duration duration = const Duration(seconds: 5)]) {
     return seekTo(position() - duration);
   }
 
@@ -41,10 +46,17 @@ abstract class IPlayerController<T> {
 
   Future<void> setStreamUrl(String url);
 
-  void setVideoLink(String url) {
+  void initLink() {
+    setVideoLink(_link, initDuration);
+  }
+
+  void setVideoLink(String url, [Duration duration]) {
     _changeState(InitIPlayerState());
     setStreamUrl(url).then((value) {
       _changeState(ReadyToPlayState(url));
+      if (duration != null) {
+        seekTo(duration);
+      }
       play().then((_) {
         onPlaying?.call();
       }).catchError((_) => onPlayingError?.call());
