@@ -38,7 +38,7 @@ abstract class ILitePlayerState extends State<ILitePlayer> {
         child: Center(
             child: PlayerStateListener(controller, builder: (_) {
           return player();
-        }, placeholder: widget.placeholder)));
+        }, placeholder: AspectRatio(aspectRatio: 16 / 9, child: widget.placeholder))));
   }
 
   Widget player();
