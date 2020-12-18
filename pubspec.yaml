@@ -26,12 +26,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^1.5.1
-
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.fastogt.player
-        pluginClass: PlayerPlugin
-      ios:
-        pluginClass: PlayerPlugin
