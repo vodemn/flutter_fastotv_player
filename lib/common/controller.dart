@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:player/common/states.dart';
 
 abstract class IPlayerController<T> {
