@@ -5,7 +5,8 @@ import 'package:player/controller.dart';
 
 class LitePlayer extends ILitePlayer {
   const LitePlayer(
-      {Key key, @required PlayerController controller,
+      {Key key,
+      @required PlayerController controller,
       Widget placeholder = const Center(child: CircularProgressIndicator())})
       : super(controller: controller, placeholder: placeholder, key: key);
 
@@ -16,6 +17,12 @@ class LitePlayer extends ILitePlayer {
 }
 
 class _LitePlayerState extends ILitePlayerState {
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+        aspectRatio: 16 / 9, child: Container(color: Colors.black, child: Center(child: player())));
+  }
+
   @override
   Widget player() {
     final options = ['--no-skip-frames'];
