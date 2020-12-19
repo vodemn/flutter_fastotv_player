@@ -33,12 +33,14 @@ abstract class ILitePlayerState extends State<ILitePlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.black,
-        child: Center(
-            child: PlayerStateListener(controller, builder: (_) {
-          return player();
-        }, placeholder: AspectRatio(aspectRatio: 16 / 9, child: widget.placeholder))));
+    return AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Container(
+            color: Colors.black,
+            child: Center(
+                child: PlayerStateListener(controller, builder: (_) {
+              return player();
+            }, placeholder: widget.placeholder))));
   }
 
   Widget player();
