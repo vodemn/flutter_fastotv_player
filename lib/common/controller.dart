@@ -54,6 +54,7 @@ abstract class IPlayerController<T> {
   void setVideoLink(String url, [Duration duration]) {
     _changeState(InitIPlayerState());
     setStreamUrl(url).then((value) {
+      _link = url;
       _changeState(ReadyToPlayState(url));
       if (duration != null) {
         seekTo(duration);
@@ -64,12 +65,13 @@ abstract class IPlayerController<T> {
     }).catchError((_) => onPlayingError?.call());
   }
 
-  void _changeState(IPlayerState state) {
-    _state.add(state);
-  }
-
   @mustCallSuper
   void dispose() {
     _state.close();
+  }
+
+  // private:
+  void _changeState(IPlayerState state) {
+    _state.add(state);
   }
 }
