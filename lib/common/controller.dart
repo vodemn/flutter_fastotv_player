@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:player/common/states.dart';
+import 'package:rxdart/subjects.dart';
 
 abstract class IPlayerController<T> {
   String _link;
   final Duration initDuration;
-  final StreamController<IPlayerState> _state = StreamController<IPlayerState>.broadcast();
+  final BehaviorSubject<IPlayerState> _state = BehaviorSubject<IPlayerState>();
   T get baseController;
 
   IPlayerController({String initLink, this.initDuration}) : _link = initLink;
@@ -53,6 +54,7 @@ abstract class IPlayerController<T> {
   void setVideoLink(String url, [Duration duration]) {
     _changeState(InitIPlayerState());
     setStreamUrl(url).then((value) {
+      _link = url;
       _changeState(ReadyToPlayState(url));
       if (duration != null) {
         seekTo(duration);
@@ -63,12 +65,13 @@ abstract class IPlayerController<T> {
     }).catchError((_) => onPlayingError?.call());
   }
 
-  void _changeState(IPlayerState state) {
-    _state.add(state);
-  }
-
   @mustCallSuper
   void dispose() {
     _state.close();
+  }
+
+  // private:
+  void _changeState(IPlayerState state) {
+    _state.add(state);
   }
 }

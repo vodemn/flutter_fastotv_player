@@ -5,14 +5,11 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:player/common/controller.dart';
 
 class PlayerController extends IPlayerController<VlcPlayerController> {
-  final Completer<void> _creatingCompleter = Completer<void>();
-  VlcPlayerController _controller;
+  final VlcPlayerController _controller = VlcPlayerController();
   String url;
 
   PlayerController({@required String initLink, Duration initDuration})
-      : super(initLink: initLink, initDuration: initDuration) {
-    _controller = VlcPlayerController(onInit: _handleInit);
-  }
+      : super(initLink: initLink, initDuration: initDuration);
 
   void addListener(VoidCallback listener) {
     _controller.addListener(listener);
@@ -89,26 +86,18 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
     }
 
     this.url = url;
-    _controller.setStreamUrl(url).then((value) {
+    return _controller.setStreamUrl(url).then((value) {
       _controller.isPlaying().then((value) {
         if (!value) {
           _controller.play();
         }
       });
     });
-    if (_controller.initialized) {
-      return Future.value();
-    }
-    return _creatingCompleter.future;
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller?.dispose();
-  }
-
-  void _handleInit() {
-    _creatingCompleter.complete();
   }
 }

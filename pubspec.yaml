@@ -15,6 +15,7 @@ dependencies:
     git:
       url: https://github.com/fastogt/flutter_vlc_player.git
       ref: master
+  rxdart: ^0.25.0
   screen:
   video_player:
     git:
