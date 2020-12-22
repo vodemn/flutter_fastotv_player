@@ -89,7 +89,13 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
     }
 
     this.url = url;
-    _controller.setStreamUrl(url);
+    _controller.setStreamUrl(url).then((value) {
+      _controller.isPlaying().then((value) {
+        if (!value) {
+          _controller.play();
+        }
+      });
+    });
     if (_controller.initialized) {
       return Future.value();
     }
