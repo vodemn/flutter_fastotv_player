@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:player/common/states.dart';
+import 'package:rxdart/subjects.dart';
 
 abstract class IPlayerController<T> {
   String _link;
   final Duration initDuration;
-  final StreamController<IPlayerState> _state = StreamController<IPlayerState>.broadcast();
+  final BehaviorSubject<IPlayerState> _state = BehaviorSubject<IPlayerState>();
 
   T get baseController;
 
