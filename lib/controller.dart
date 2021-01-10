@@ -5,11 +5,15 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:player/common/controller.dart';
 
 class PlayerController extends IPlayerController<VlcPlayerController> {
-  final VlcPlayerController _controller = VlcPlayerController();
+  VlcPlayerController _controller;
   String url;
 
   PlayerController({@required String initLink, Duration initDuration})
-      : super(initLink: initLink, initDuration: initDuration);
+      : super(initLink: initLink, initDuration: initDuration) {
+    _controller = VlcPlayerController(onInit: () {
+      _controller.play();
+    });
+  }
 
   void addListener(VoidCallback listener) {
     _controller.addListener(listener);
