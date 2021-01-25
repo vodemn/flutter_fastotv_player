@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:player/common/controller.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:player/common/player.dart';
-import 'package:video_player/video_player.dart';
+import 'package:player/controller.dart';
 
 class LitePlayer extends ILitePlayer {
   const LitePlayer(
-      {@required IPlayerController controller,
-      Widget placeholder = const Center(child: CircularProgressIndicator()),
-      Key key})
+      {Key key,
+      @required PlayerController controller,
+      Widget placeholder = const Center(child: CircularProgressIndicator())})
       : super(controller: controller, placeholder: placeholder, key: key);
 
   @override
@@ -18,8 +18,21 @@ class LitePlayer extends ILitePlayer {
 
 class _LitePlayerState extends ILitePlayerState {
   @override
-  Widget player() {
+  Widget build(BuildContext context) {
     return AspectRatio(
-        aspectRatio: controller.aspectRatio(), child: VideoPlayer(controller.baseController));
+        aspectRatio: 16 / 9, child: Container(color: Colors.black, child: Center(child: player())));
+  }
+
+  @override
+  Widget player() {
+    return VlcPlayer(
+      //url: controller.currentLink,
+      aspectRatio: controller.aspectRatio(),
+      controller: controller.baseController,
+      placeholder: widget.placeholder,
+      //hwAcc: HwAcc.FULL,
+      //options: ['--no-skip-frames'],
+      //isLocalMedia: false
+    );
   }
 }

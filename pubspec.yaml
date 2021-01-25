@@ -1,4 +1,5 @@
 name: player
+description: A new flutter plugin project.
 version: 0.0.1
 
 publish_to: none
@@ -10,8 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_vlc_player: ^5.0.2
   rxdart: ^0.24.0
-  screen: 
+  screen:
   video_player:
     git:
       url: https://github.com/topilski/plugins.git
@@ -22,4 +24,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^1.5.1
-

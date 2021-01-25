@@ -1,30 +1,45 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:player/common/controller.dart';
-import 'package:video_player/video_player.dart';
 
-class PlayerController extends IPlayerController<VideoPlayerController> {
-  VideoPlayerController _controller;
+class PlayerController extends IPlayerController<VlcPlayerController> {
+  VlcPlayerController _controller;
+  String url;
 
   PlayerController({@required String initLink, Duration initDuration})
-      : super(initLink: initLink, initDuration: initDuration);
+      : super(initLink: initLink, initDuration: initDuration) {
+    _controller = VlcPlayerController.network(initLink,
+        hwAcc: HwAcc.FULL,
+        options: VlcPlayerOptions(video: VlcVideoOptions([VlcVideoOptions.skipFrames(false)])));
+  }
+
+  void addListener(VoidCallback listener) {
+    _controller.addListener(listener);
+  }
+
+  void removeListener(VoidCallback listener) {
+    _controller.removeListener(listener);
+  }
 
   @override
-  VideoPlayerController get baseController => _controller;
+  VlcPlayerController get baseController => _controller;
+
+  bool get initialized => _controller.value.isInitialized;
 
   @override
   bool isPlaying() {
-    if (_controller == null) {
+    if (!_controller.value.isInitialized) {
       return false;
     }
 
-    return _controller.value.isPlaying;
+    return _controller.value.playingState == PlayingState.playing;
   }
 
   @override
   Duration position() {
-    if (_controller == null) {
+    if (!initialized) {
       return const Duration();
     }
     return _controller.value.position;
@@ -32,16 +47,12 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
 
   @override
   double aspectRatio() {
-    if (_controller == null) {
-      return 16 / 9;
-    }
-
-    return _controller.value.aspectRatio;
+    return 16 / 9;
   }
 
   @override
   Future<void> pause() async {
-    if (_controller == null) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
 
@@ -50,7 +61,7 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
 
   @override
   Future<void> play() async {
-    if (_controller == null) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
 
@@ -59,19 +70,19 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
 
   @override
   Future<void> seekTo([Duration duration = const Duration(seconds: 5)]) async {
-    if (_controller == null) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
 
-    return _controller.seekTo(duration);
+    return _controller.setTime(duration.inMilliseconds);
   }
 
   @override
   Future<void> setVolume(double volume) {
-    if (_controller == null) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
-    return _controller.setVolume(volume);
+    return _controller.setVolume((volume * 100).toInt());
   }
 
   @override
@@ -80,13 +91,13 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
       return Future.error('Invalid input');
     }
 
-    final VideoPlayerController controller = VideoPlayerController.network(url);
-    final VideoPlayerController old = _controller;
-    _controller = controller;
-    old?.pause();
-
-    return _controller.initialize().then((_) {
-      old?.dispose();
+    this.url = url;
+    return _controller.setMediaFromNetwork(url).then((value) {
+      _controller.isPlaying().then((value) {
+        if (!value) {
+          _controller.play();
+        }
+      });
     });
   }
 

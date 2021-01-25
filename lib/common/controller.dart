@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 import 'package:player/common/states.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -9,7 +9,6 @@ abstract class IPlayerController<T> {
   String _link;
   final Duration initDuration;
   final BehaviorSubject<IPlayerState> _state = BehaviorSubject<IPlayerState>();
-
   T get baseController;
 
   IPlayerController({String initLink, this.initDuration}) : _link = initLink;
@@ -34,7 +33,7 @@ abstract class IPlayerController<T> {
 
   Future<void> play();
 
-  Future<void> seekTo(Duration duration);
+  Future<void> seekTo([Duration duration = const Duration(seconds: 5)]);
 
   Future<void> seekForward([Duration duration = const Duration(seconds: 5)]) {
     return seekTo(position() + duration);
