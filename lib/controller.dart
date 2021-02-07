@@ -66,6 +66,18 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
     return _controller.seekTo(duration);
   }
 
+  Future<void> setPlaybackSpeed(double speed) async {
+    if (_controller == null) {
+      return Future.error('Invalid state');
+    }
+
+    if (speed == null || speed <= 0) {
+      return Future.error('Invalid speed');
+    }
+
+    return _controller.setPlaybackSpeed(speed);
+  }
+
   @override
   Future<void> setVolume(double volume) {
     if (_controller == null) {
