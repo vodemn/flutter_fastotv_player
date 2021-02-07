@@ -18,7 +18,8 @@ class PlayerStateListener extends StatelessWidget {
   final Widget Function(BuildContext) builder;
   final Widget placeholder;
 
-  const PlayerStateListener(this.controller, {this.placeholder, this.builder});
+  const PlayerStateListener(this.controller,
+      {@required this.builder, this.placeholder = const SizedBox()});
 
   @override
   Widget build(BuildContext context) {

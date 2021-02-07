@@ -80,7 +80,8 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
       return Future.error('Invalid input');
     }
 
-    final VideoPlayerController controller = VideoPlayerController.network(url);
+    final VideoPlayerController controller = VideoPlayerController.network(url,
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
     final VideoPlayerController old = _controller;
     _controller = controller;
     old?.pause();
