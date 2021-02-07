@@ -66,6 +66,18 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
     return _controller.seekTo(duration);
   }
 
+  Future<void> setPlaybackSpeed(double speed) async {
+    if (_controller == null) {
+      return Future.error('Invalid state');
+    }
+
+    if (speed == null || speed <= 0) {
+      return Future.error('Invalid speed');
+    }
+
+    return _controller.setPlaybackSpeed(speed);
+  }
+
   @override
   Future<void> setVolume(double volume) {
     if (_controller == null) {
@@ -80,7 +92,8 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
       return Future.error('Invalid input');
     }
 
-    final VideoPlayerController controller = VideoPlayerController.network(url);
+    final VideoPlayerController controller = VideoPlayerController.network(url,
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
     final VideoPlayerController old = _controller;
     _controller = controller;
     old?.pause();

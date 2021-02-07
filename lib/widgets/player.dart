@@ -6,9 +6,16 @@ import 'package:video_player/video_player.dart';
 class LitePlayer extends ILitePlayer {
   const LitePlayer(
       {@required IPlayerController controller,
+      double aspectRatio,
+      bool keepScreen,
       Widget placeholder = const Center(child: CircularProgressIndicator()),
       Key key})
-      : super(controller: controller, placeholder: placeholder, key: key);
+      : super(
+            controller: controller,
+            aspectRatio: aspectRatio,
+            keepScreen: keepScreen,
+            placeholder: placeholder,
+            key: key);
 
   @override
   _LitePlayerState createState() {

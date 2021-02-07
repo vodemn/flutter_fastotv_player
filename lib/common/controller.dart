@@ -12,7 +12,9 @@ abstract class IPlayerController<T> {
 
   T get baseController;
 
-  IPlayerController({String initLink, this.initDuration}) : _link = initLink;
+  IPlayerController({String initLink, this.initDuration}) : _link = initLink {
+    _state.add(InitIPlayerState());
+  }
 
   Stream<IPlayerState> get state => _state.stream;
 
@@ -43,6 +45,8 @@ abstract class IPlayerController<T> {
   Future<void> seekBackward([Duration duration = const Duration(seconds: 5)]) {
     return seekTo(position() - duration);
   }
+
+  Future<void> setPlaybackSpeed(double speed);
 
   void setVolume(double volume);
 
