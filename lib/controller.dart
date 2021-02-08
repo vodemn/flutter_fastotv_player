@@ -10,9 +10,9 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
 
   PlayerController({@required String initLink, Duration initDuration})
       : super(initLink: initLink, initDuration: initDuration) {
-    _controller = VlcPlayerController(onInit: () {
-      _controller.play();
-    });
+    _controller = VlcPlayerController.network(initLink,
+        hwAcc: HwAcc.FULL,
+        options: VlcPlayerOptions(video: VlcVideoOptions([VlcVideoOptions.skipFrames(false)])));
   }
 
   void addListener(VoidCallback listener) {
@@ -26,21 +26,23 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
   @override
   VlcPlayerController get baseController => _controller;
 
+  bool get initialized => _controller.value.isInitialized;
+
   @override
   bool isPlaying() {
-    if (!_controller.initialized) {
+    if (!_controller.value.isInitialized) {
       return false;
     }
 
-    return _controller.playingState == PlayingState.PLAYING;
+    return _controller.value.playingState == PlayingState.playing;
   }
 
   @override
   Duration position() {
-    if (!_controller.initialized) {
+    if (!initialized) {
       return const Duration();
     }
-    return _controller.position;
+    return _controller.value.position;
   }
 
   @override
@@ -50,7 +52,7 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
 
   @override
   Future<void> pause() async {
-    if (!_controller.initialized) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
 
@@ -59,7 +61,7 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
 
   @override
   Future<void> play() async {
-    if (!_controller.initialized) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
 
@@ -68,7 +70,7 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
 
   @override
   Future<void> seekTo([Duration duration = const Duration(seconds: 5)]) async {
-    if (!_controller.initialized) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
 
@@ -77,7 +79,7 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
 
   @override
   Future<void> setVolume(double volume) {
-    if (!_controller.initialized) {
+    if (!initialized) {
       return Future.error('Invalid state');
     }
     return _controller.setVolume((volume * 100).toInt());
@@ -90,7 +92,7 @@ class PlayerController extends IPlayerController<VlcPlayerController> {
     }
 
     this.url = url;
-    return _controller.setStreamUrl(url).then((value) {
+    return _controller.setMediaFromNetwork(url).then((value) {
       _controller.isPlaying().then((value) {
         if (!value) {
           _controller.play();
