@@ -7,12 +7,17 @@ import 'package:screen/screen.dart';
 abstract class ILitePlayer extends StatefulWidget {
   final IPlayerController controller;
   final Widget placeholder;
+  final double aspectRatio;
+  final bool keepScreen;
 
   const ILitePlayer(
-      {this.controller,
+      {@required this.controller,
+      this.aspectRatio,
+      bool keepScreen,
       this.placeholder = const Center(child: CircularProgressIndicator()),
       Key key})
-      : super(key: key);
+      : keepScreen = keepScreen ?? true,
+        super(key: key);
 }
 
 abstract class ILitePlayerState extends State<ILitePlayer> {
@@ -21,7 +26,9 @@ abstract class ILitePlayerState extends State<ILitePlayer> {
   @override
   void initState() {
     super.initState();
-    _setScreen(true);
+    if (widget.keepScreen) {
+      _setScreen(true);
+    }
     controller.initLink();
   }
 

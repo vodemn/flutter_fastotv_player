@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:player/common/controller.dart';
 import 'package:player/common/player.dart';
-import 'package:player/controller.dart';
 
 class LitePlayer extends ILitePlayer {
   const LitePlayer(
-      {Key key,
-      @required PlayerController controller,
-      Widget placeholder = const Center(child: CircularProgressIndicator())})
-      : super(controller: controller, placeholder: placeholder, key: key);
+      {@required IPlayerController controller,
+      double aspectRatio,
+      bool keepScreen,
+      Widget placeholder = const Center(child: CircularProgressIndicator()),
+      Key key})
+      : super(
+            controller: controller,
+            aspectRatio: aspectRatio,
+            keepScreen: keepScreen,
+            placeholder: placeholder,
+            key: key);
 
   @override
   _LitePlayerState createState() {
