@@ -14,7 +14,7 @@ dependencies:
   screen: 
   video_player:
     git:
-      url: https://github.com/fastogt/plugins.git
+      url: https://github.com/topilski/plugins.git
       ref: master
       path: packages/video_player/video_player
 
