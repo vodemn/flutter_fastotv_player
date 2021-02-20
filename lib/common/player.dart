@@ -12,11 +12,12 @@ abstract class ILitePlayer extends StatefulWidget {
 
   const ILitePlayer(
       {@required this.controller,
-      this.aspectRatio,
+      double aspectRatio,
       bool keepScreen,
       this.placeholder = const Center(child: CircularProgressIndicator()),
       Key key})
-      : keepScreen = keepScreen ?? true,
+      : aspectRatio = aspectRatio ?? 16 / 9,
+        keepScreen = keepScreen ?? true,
         super(key: key);
 }
 
@@ -40,11 +41,7 @@ abstract class ILitePlayerState extends State<ILitePlayer> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.aspectRatio == null) {
-      return _player();
-    } else {
-      return AspectRatio(aspectRatio: widget.aspectRatio, child: _player());
-    }
+    return AspectRatio(aspectRatio: widget.aspectRatio, child: _player());
   }
 
   Widget _player() {
