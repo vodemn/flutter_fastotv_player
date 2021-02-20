@@ -75,9 +75,9 @@ class _VideoProgressIndicatorVLCState extends State<VideoProgressIndicatorVLC> {
   @override
   Widget build(BuildContext context) {
     Widget progressIndicator;
-    if (controller.initialized) {
-      final int duration = controller.duration.inMilliseconds;
-      final int position = controller.position.inMilliseconds;
+    if (controller.value.isInitialized) {
+      final int duration = controller.value.duration.inMilliseconds;
+      final int position = controller.value.position.inMilliseconds;
       double result = position / duration;
       if (result.isNaN || result.isInfinite) {
         result = 0;
@@ -120,6 +120,7 @@ class _VideoScrubberState extends State<_VideoScrubber> {
   bool _controllerWasPlaying = false;
 
   VlcPlayerController get controller => widget.controller;
+  VlcPlayerValue get value => widget.controller.value;
 
   @override
   Widget build(BuildContext context) {
@@ -127,23 +128,23 @@ class _VideoScrubberState extends State<_VideoScrubber> {
       final RenderBox box = context.findRenderObject();
       final Offset tapPos = box.globalToLocal(globalPosition);
       final double relative = tapPos.dx / box.size.width;
-      final Duration position = controller.duration * relative;
+      final Duration position = value.duration * relative;
       controller.setTime(position.inMilliseconds);
     }
 
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onHorizontalDragStart: (DragStartDetails details) {
-          if (!controller.initialized) {
+          if (!value.isInitialized) {
             return;
           }
-          _controllerWasPlaying = controller.playingState == PlayingState.PLAYING;
+          _controllerWasPlaying = value.playingState == PlayingState.playing;
           if (_controllerWasPlaying) {
             controller.pause();
           }
         },
         onHorizontalDragUpdate: (DragUpdateDetails details) {
-          if (!controller.initialized) {
+          if (!value.isInitialized) {
             return;
           }
           seekToRelativePosition(details.globalPosition);
@@ -154,7 +155,7 @@ class _VideoScrubberState extends State<_VideoScrubber> {
           }
         },
         onTapDown: (TapDownDetails details) {
-          if (!controller.initialized) {
+          if (!value.isInitialized) {
             return;
           }
           seekToRelativePosition(details.globalPosition);
