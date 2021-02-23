@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:player/common/controller.dart';
 import 'package:video_player/video_player.dart';
@@ -93,8 +94,14 @@ class PlayerController extends IPlayerController<VideoPlayerController> {
       return Future.error('Invalid input');
     }
 
-    final VideoPlayerController controller = VideoPlayerController.network(url,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
+    VideoPlayerController controller;
+    if (kIsWeb) {
+      controller = VideoPlayerController.network(url);
+    } else {
+      controller = VideoPlayerController.network(url,
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
+    }
+    
     final VideoPlayerController old = _controller;
     _controller = controller;
     old?.pause();
